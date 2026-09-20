@@ -1,0 +1,24 @@
+# Credentials & API Tokens (CRITICAL)
+.secrets/
+*.rds
+
+# Your existing entries
+library/
+local/
+cellar/
+lock/
+python/
+sandbox/
+staging/
+
+# R/Positron Temporary Files
+.Rproj.user/
+.Rhistory
+.RData
+.Ruserdata
+.Renviron
+
+# renv local library (renv.lock SHOULD be committed, but the raw library shouldn't)
+renv/library/
+renv/python/
+renv/staging/
