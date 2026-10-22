@@ -87,7 +87,7 @@ server <- function(input, output, session) {
     schema = data.frame(Variable = character(), Prompt = character(), Type = character(), Options = character(), stringsAsFactors = FALSE),
     sheet_id = NULL,
    # data = iris,
-    data = data.frame()
+    data = data.frame(),
    final_models = list() # Holds the single latest result per module
   )
   
