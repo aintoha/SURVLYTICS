@@ -112,7 +112,14 @@ survey_server <- function(id, shared_state) {
     output$schema_table <- renderDT({ 
       datatable(shared_state$schema, options = list(dom = 't')) 
     })
-    
+  
+    # to delete question
+    observeEvent(input$delete_q, {
+      req(input$schema_table_rows_selected) 
+      selected_rows <- input$schema_table_rows_selected
+      shared_state$schema <- shared_state$schema[-selected_rows, ]
+    })
+
     # --- 2. CLOUD DATABASE INITIALIZATION ---
     observeEvent(input$connect_btn, {
       req(input$user_sheet_url)

@@ -3,6 +3,7 @@ library(bslib)
 library(googlesheets4)
 library(googledrive)
 library(dplyr)
+library(nortest)
 library(ggplot2)
 library(DT)
 library(hunspell)
@@ -36,8 +37,10 @@ source("R/analytics/05_hypothesis_module.R")
 source("R/analytics/06_linear_regression_module.R")
 source("R/analytics/07_logistic_regression_module.R")
 source("R/analytics/08_summary_report_module.R")
+source("R/helper_module.R")
 
 ui <- page_navbar(
+  id = "main_tabs",
   title = "SURVLYTICS",
   theme = bs_theme(version = 5, bootswatch = "flatly"),
   
@@ -52,12 +55,33 @@ ui <- page_navbar(
     nav_panel("Hypothesis Testing", hypothesis_ui("ht_mod")),
     nav_panel("Linear Regression", linear_regression_ui("lm_mod")),
     nav_panel("Logistic Regression", logistic_regression_ui("glm_mod")), 
-    nav_panel("Final Summary & Workflow", summary_report_ui("sum_mod"))
+    nav_panel("Final Summary & Workflow", summary_report_ui("sum_mod")), 
+    nav_panel("Guide", helper_ui("helper_mod"))
   )
 )
 
 
 server <- function(input, output, session) {
+  
+  # --- RESPONDENT ROUTING LOGIC ---
+  observe({
+    query <- parseQueryString(session$clientData$url_search)
+    
+    # If the URL contains ?mode=respondent
+    if (!is.null(query$mode) && query$mode == "respondent") {
+      
+      # 1. Inject CSS to completely hide the top navigation bar immediately
+      insertUI(
+        selector = "head",
+        ui = tags$style(".navbar { display: none !important; }")
+      )
+      
+      # 2. Wait for the page to finish drawing, THEN safely switch the tab!
+      session$onFlushed(function() {
+        updateNavbarPage(session, "main_tabs", selected = "2. Active Survey")
+      }, once = TRUE)
+    }
+  })
   
   app_state <- reactiveValues(
     schema = data.frame(Variable = character(), Prompt = character(), Type = character(), Options = character(), stringsAsFactors = FALSE),
@@ -77,6 +101,7 @@ server <- function(input, output, session) {
   linear_regression_server("lm_mod", app_state)
   logistic_regression_server("glm_mod", app_state)
   summary_report_server("sum_mod", app_state)
+  helper_server("helper_mod", app_state)
 }
 
 shinyApp(ui, server)
