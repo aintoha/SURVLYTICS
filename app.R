@@ -23,6 +23,9 @@ if (!rmarkdown::pandoc_available()) {
   }
 }
 
+# link to google 
+gs4_auth()
+
 # Source modules
 source("R/survey_module.R")
 source("R/analytics/01_summary_meta_module.R")
@@ -59,8 +62,8 @@ server <- function(input, output, session) {
   app_state <- reactiveValues(
     schema = data.frame(Variable = character(), Prompt = character(), Type = character(), Options = character(), stringsAsFactors = FALSE),
     sheet_id = NULL,
-    data = iris,
-   # data = data.frame()
+   # data = iris,
+    data = data.frame()
    final_models = list() # Holds the single latest result per module
   )
   
