@@ -11,7 +11,7 @@ summary_report_ui <- function(id) {
         ns("include_modules"),
         "Include Modules in Summary:",
         choices = c(
-          "Data Wrangling",
+          "Data Preprocessing",
           "Descriptive Statistics",
           "Normality Diagnostics",
           "Hypothesis Testing",

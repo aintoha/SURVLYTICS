@@ -24,6 +24,9 @@ if (!rmarkdown::pandoc_available()) {
   }
 }
 
+# link to google 
+gs4_auth()
+
 # Source modules
 source("R/survey_module.R")
 source("R/analytics/01_summary_meta_module.R")
@@ -46,7 +49,7 @@ ui <- page_navbar(
   
   nav_menu("3. Analytics Engine",
     nav_panel("Metadata & Overview", summary_meta_ui("meta_mod")),
-    nav_panel("Data Wrangling", cleaning_ui("clean_mod")),
+    nav_panel("Data Cleaning", cleaning_ui("clean_mod")),
     nav_panel("Descriptive & Visuals", descriptive_ui("desc_mod")),
     nav_panel("Normality Tests", normality_ui("norm_mod")), #
     nav_panel("Hypothesis Testing", hypothesis_ui("ht_mod")),
@@ -83,8 +86,9 @@ server <- function(input, output, session) {
   app_state <- reactiveValues(
     schema = data.frame(Variable = character(), Prompt = character(), Type = character(), Options = character(), stringsAsFactors = FALSE),
     sheet_id = NULL,
-    data = data.frame(),
-    final_models = list() # Holds the single latest result per module
+   # data = iris,
+    data = data.frame()
+   final_models = list() # Holds the single latest result per module
   )
   
   # Initialize Servers
